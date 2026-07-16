@@ -1,6 +1,18 @@
 package main
 
-import "fmt"
+import (
+	"Go-Networking/client"
+	"Go-Networking/server"
+	"time"
+	// "net/http"
+)
+
 func main()  {
-	fmt.Println("Hello world")
-}
+	go func() {
+		server.StartSever()
+	}()
+
+	time.Sleep(time.Second)		// start everything
+
+	client.StartClient()
+} 
