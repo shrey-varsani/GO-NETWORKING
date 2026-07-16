@@ -9,7 +9,7 @@ import (
 )
 
 func StartClient() {
-	conn, err := net.Dial("tcp", "localhost:8080")
+	conn, err := net.Dial("tcp", "localhost:8080")		// connects the client to the given address
 
 	if err != nil {
 		log.Printf("Couldn't connect to the server: %v", err)
