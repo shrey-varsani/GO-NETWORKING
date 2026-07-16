@@ -8,7 +8,7 @@ import (
 func StartSever() {
 	address := "localhost:8080"
 
-	listener, err := net.Listen("tcp",address)
+	listener, err := net.Listen("tcp", address)
 	if err != nil {
 		log.Fatalf("Couldn't set up the connection!")
 	}
@@ -22,6 +22,7 @@ func StartSever() {
 		conn, err := listener.Accept()
 		if err != nil {
 			// didn't accept just go to another one 
+			log.Printf("Missed a conversation due to: %v", err)
 			continue
 		}
 
@@ -33,7 +34,7 @@ func StartSever() {
 func handleClient(conn net.Conn) {
 	defer conn.Close()
 
-	log.Printf("New Client connected: %s ", conn.RemoteAddr())
+	log.Printf("New Client connected: %s ", conn.RemoteAddr())		// IP addredss of client
 
 	// start conversation
 	buffer := make([]byte, 1024)
@@ -48,6 +49,6 @@ func handleClient(conn net.Conn) {
 
 		message := string(buffer[:received])		// only received bytes
 		log.Printf("Received: %s", message)
-		conn.Write([]byte(message))
+		conn.Write([]byte("server says: "+ message))
 	}
 }
