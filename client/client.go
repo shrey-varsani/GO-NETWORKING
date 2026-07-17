@@ -25,7 +25,7 @@ func StartClient() {
 	for {
 		fmt.Print(">")
 		if !scanner.Scan() {
-			// no input  | EOF
+			// no input | EOF
 			break		
 		}
 
@@ -46,3 +46,4 @@ func StartClient() {
 		fmt.Println(string(respone[:received]))
 	}
 }
+

@@ -8,6 +8,7 @@ import (
 func StartSever() {
 	address := "localhost:8080"
 
+	// set the phone line => network address
 	listener, err := net.Listen("tcp", address)
 	if err != nil {
 		log.Fatalf("Couldn't set up the connection!")
