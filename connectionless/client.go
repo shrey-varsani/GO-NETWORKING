@@ -7,35 +7,34 @@ import (
 	"time"
 )
 
-func UPDClient() {
+func StartClient() {
 	addr, err := net.ResolveUDPAddr("udp", "localhost:8080")
-	if err != nil {
+	if err != nil{
 		log.Fatal("Couldn't resolve address:", err)
 	}
 
 	conn, err := net.DialUDP("udp", nil, addr)
 	if err != nil {
-		log.Fatal("Connection failed:", err)
+		log.Fatal("Couldn't Dial the address", err)
 	}
 
 	defer conn.Close()
 
-	// send a message
+	// start conversation
 	message := []byte("Hello, UDP!")
 	_, err = conn.Write(message)
 	if err != nil {
 		log.Printf("Send failed: %v", err)
-		return 
-	}
-
-	// wait for reply with timeout
-	conn.SetReadDeadline(time.Now().Add(5 * time.Second))
-	buffer := make([]byte, 1024)
-	n, _, err := conn.ReadFromUDP(buffer)
-	if err != nil {
-		log.Printf("Receive error: %v", err)
 		return
 	}
 
-	fmt.Printf("Server says: %s\n", string(buffer[:n]))
+	// wait for server reply with timelimit
+	conn.SetDeadline(time.Now().Add(time.Second * 5))
+	buffer := make([]byte, 1024)
+	n, err := conn.Read(buffer)
+	if err != nil {
+		log.Printf("Error while receiving: %v", err)
+	}
+
+	fmt.Printf("Server says: %s", string(buffer[:n]))
 }

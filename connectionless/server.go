@@ -6,38 +6,36 @@ import (
 	"net"
 )
 
-// ListenUDP and WriteTo
+func StartServer() {
+	// set udp adderss
 
-func main() {
-
-	// set up the UDP address
-	addr, err := net.ResolveUDPAddr("udp", "localhost:8080")
+	addr, err := net.ResolveUDPAddr("tcp", "localhost:8080")
 	if err != nil {
-		log.Fatal("Couldn't resolve address:", err)
+		log.Fatal("Couldn't resolve the address", err)
 	}
 
-	// start listening 
-	conn, err := net.ListenUDP("udp", addr)			// same as tcp => Listen 
+	// listen 
+	conn, err := net.ListenUDP("udp", addr)
 	if err != nil {
-		log.Fatal("Listen failed:", err)
+		log.Fatal("Failed to listen", err)
 	}
 
 	defer conn.Close()
 
-	// buffer for incoming data
+	// incoming data
 	buffer := make([]byte, 1024)
 	for {
-		// get clientAddr without conn.RemoteAddr() (unlike tcp)
-		received, clientAddr, err := conn.ReadFromUDP(buffer)
+		n,_, err := conn.ReadFromUDP(buffer)
 		if err != nil {
 			log.Printf("Read error: %v", err)
 			continue
 		}
 
-		fmt.Printf("Got message from %s: %s\n", clientAddr, string(buffer[:received]))		// bytes => string
+		// read => string 
+		fmt.Printf("Received message: %s from %s", string(buffer[:n]), addr)
 
-		// send back to client
-		_, err = conn.WriteToUDP(buffer[:received], clientAddr)
+		// send back 
+		_, err = conn.WriteToUDP(buffer[:n], addr)
 		if err != nil {
 			log.Printf("Write error: %v", err)
 		}
